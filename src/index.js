@@ -397,9 +397,9 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset, document} = this.state
+    const {currentEvent, currentTarget, place, effect, offset} = this.state
     const node = ReactDOM.findDOMNode(this)
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset, document, this.isIE())
+    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset, this.props.document, this.isIE())
 
     if (result.isNewState) {
       // Switch to reverse placement

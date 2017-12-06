@@ -21,7 +21,7 @@ export default function (e, target, node, place, effect, offset, doc, isIE) {
   const defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight)
   const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
 
-  let container = doc.defaultView || doc.parentWindow || window
+  let container = (doc && (doc.defaultView || doc.parentWindow)) || window
 
   const windowWidth = container.innerWidth
   const windowHeight = container.innerHeight
