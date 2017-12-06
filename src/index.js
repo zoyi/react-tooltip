@@ -167,7 +167,7 @@ class ReactTooltip extends Component {
   /**
    * Check IE for corrent position calculation
    */
-  isIE() {
+  isIE () {
     return platform.name.toString().indexOf('IE') !== -1
   }
 
