@@ -15,6 +15,7 @@ import getEffect from './decorators/getEffect'
 import trackRemoval from './decorators/trackRemoval'
 
 /* Utils */
+import getWindow from './utils/window'
 import getPosition from './utils/getPosition'
 import getTipContent from './utils/getTipContent'
 import { parseAria } from './utils/aria'
@@ -201,8 +202,8 @@ class ReactTooltip extends Component {
 
     // Global event to hide tooltip
     if (globalEventOff) {
-      window.removeEventListener(globalEventOff, this.hideTooltip)
-      window.addEventListener(globalEventOff, this.hideTooltip, false)
+      getWindow(this.props.document).removeEventListener(globalEventOff, this.hideTooltip)
+      getWindow(this.props.document).addEventListener(globalEventOff, this.hideTooltip, false)
     }
 
     // Track removal of targetArray elements from DOM
@@ -220,7 +221,7 @@ class ReactTooltip extends Component {
       if (this.isCustomEvent(target)) this.customUnbindListener(target)
     })
 
-    if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    if (globalEventOff) getWindow(this.props.document).removeEventListener(globalEventOff, this.hideTooltip)
     this.unbindRemovalTracker()
   }
 
@@ -265,7 +266,7 @@ class ReactTooltip extends Component {
     const isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null
 
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
-    const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
+    const switchToSolid = e instanceof getWindow(this.props.document).FocusEvent || isGlobalCall
 
     // if it needs to skip adding hide listener to scroll
     let scrollHide = true
@@ -388,11 +389,11 @@ class ReactTooltip extends Component {
    */
   addScrollListener (e) {
     const isCaptureMode = this.isCapture(e.currentTarget)
-    window.addEventListener('scroll', this.hideTooltip, isCaptureMode)
+    getWindow(this.props.document).addEventListener('scroll', this.hideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {
-    window.removeEventListener('scroll', this.hideTooltip)
+    getWindow(this.props.document).removeEventListener('scroll', this.hideTooltip)
   }
 
   // Calculation the position

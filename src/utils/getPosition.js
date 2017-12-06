@@ -14,6 +14,9 @@
  * - `newState` {Object}
  * - `position` {OBject} {left: {Number}, top: {Number}}
  */
+/* Utils */
+import getWindow from './window'
+
 export default function (e, target, node, place, effect, offset, doc, isIE) {
   const tipWidth = node.clientWidth
   const tipHeight = node.clientHeight
@@ -21,7 +24,7 @@ export default function (e, target, node, place, effect, offset, doc, isIE) {
   const defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight)
   const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
 
-  let container = (doc && (doc.defaultView || doc.parentWindow)) || window
+  let container = getWindow(doc)
 
   const windowWidth = container.innerWidth
   const windowHeight = container.innerHeight
