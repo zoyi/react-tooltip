@@ -14,17 +14,19 @@
  * - `newState` {Object}
  * - `position` {OBject} {left: {Number}, top: {Number}}
  */
-export default function (e, target, node, place, effect, offset) {
+export default function (e, target, node, place, effect, offset, doc, isIE) {
   const tipWidth = node.clientWidth
   const tipHeight = node.clientHeight
   const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
   const defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight)
   const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
 
-  const windowWidth = window.innerWidth
-  const windowHeight = window.innerHeight
+  let container = doc.defaultView || doc.parentWindow || window
 
-  const {parentTop, parentLeft} = getParent(node)
+  const windowWidth = container.innerWidth
+  const windowHeight = container.innerHeight
+
+  const {parentTop, parentLeft} = getParent(node, isIE)
 
   // Get the edge offset of the tooltip
   const getTipOffsetLeft = (place) => {
@@ -271,15 +273,15 @@ const calculateOffset = (offset) => {
 }
 
 // Get the offset of the parent elements
-const getParent = (currentTarget) => {
+const getParent = (currentTarget, isIE) => {
   let currentParent = currentTarget
   while (currentParent) {
     if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break
     currentParent = currentParent.parentElement
   }
 
-  const parentTop = currentParent && currentParent.getBoundingClientRect().top || 0
-  const parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0
+  const parentTop = !isIE && currentParent && currentParent.getBoundingClientRect().top || 0
+  const parentLeft = !isIE && currentParent && currentParent.getBoundingClientRect().left || 0
 
   return {parentTop, parentLeft}
 }

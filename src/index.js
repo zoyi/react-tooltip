@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
+import platform from 'platform'
 
 /* Decoraters */
 import staticMethods from './decorators/staticMethods'
@@ -161,6 +162,13 @@ class ReactTooltip extends Component {
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
+  }
+
+  /**
+   * Check IE for corrent position calculation
+   */
+  isIE() {
+    return platform.name.toString().indexOf('IE') !== -1
   }
 
   /**
@@ -389,9 +397,9 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const {currentEvent, currentTarget, place, effect, offset, document} = this.state
     const node = ReactDOM.findDOMNode(this)
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset, document, this.isIE())
 
     if (result.isNewState) {
       // Switch to reverse placement
