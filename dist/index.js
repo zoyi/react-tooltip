@@ -59,6 +59,10 @@ var _trackRemoval = require('./decorators/trackRemoval');
 
 var _trackRemoval2 = _interopRequireDefault(_trackRemoval);
 
+var _window = require('./utils/window');
+
+var _window2 = _interopRequireDefault(_window);
+
 var _getPosition = require('./utils/getPosition');
 
 var _getPosition2 = _interopRequireDefault(_getPosition);
@@ -244,8 +248,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       // Global event to hide tooltip
       if (globalEventOff) {
-        window.removeEventListener(globalEventOff, this.hideTooltip);
-        window.addEventListener(globalEventOff, this.hideTooltip, false);
+        (0, _window2.default)(this.props.document).removeEventListener(globalEventOff, this.hideTooltip);
+        (0, _window2.default)(this.props.document).addEventListener(globalEventOff, this.hideTooltip, false);
       }
 
       // Track removal of targetArray elements from DOM
@@ -272,7 +276,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         if (_this4.isCustomEvent(target)) _this4.customUnbindListener(target);
       });
 
-      if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip);
+      if (globalEventOff) (0, _window2.default)(this.props.document).removeEventListener(globalEventOff, this.hideTooltip);
       this.unbindRemovalTracker();
     }
 
@@ -331,7 +335,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null;
 
       // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
-      var switchToSolid = e instanceof window.FocusEvent || isGlobalCall;
+      var switchToSolid = e instanceof (0, _window2.default)(this.props.document).FocusEvent || isGlobalCall;
 
       // if it needs to skip adding hide listener to scroll
       var scrollHide = true;
@@ -473,12 +477,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'addScrollListener',
     value: function addScrollListener(e) {
       var isCaptureMode = this.isCapture(e.currentTarget);
-      window.addEventListener('scroll', this.hideTooltip, isCaptureMode);
+      (0, _window2.default)(this.props.document).addEventListener('scroll', this.hideTooltip, isCaptureMode);
     }
   }, {
     key: 'removeScrollListener',
     value: function removeScrollListener() {
-      window.removeEventListener('scroll', this.hideTooltip);
+      (0, _window2.default)(this.props.document).removeEventListener('scroll', this.hideTooltip);
     }
 
     // Calculation the position

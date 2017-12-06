@@ -18,7 +18,7 @@ exports.default = function (e, target, node, place, effect, offset, doc, isIE) {
       extraOffset_X = _calculateOffset.extraOffset_X,
       extraOffset_Y = _calculateOffset.extraOffset_Y;
 
-  var container = doc && (doc.defaultView || doc.parentWindow) || window;
+  var container = (0, _window2.default)(doc);
 
   var windowWidth = container.innerWidth;
   var windowHeight = container.innerHeight;
@@ -171,7 +171,30 @@ exports.default = function (e, target, node, place, effect, offset, doc, isIE) {
   };
 };
 
+var _window = require('./window');
+
+var _window2 = _interopRequireDefault(_window);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Get current mouse offset
+/**
+ * Calculate the position of tooltip
+ *
+ * @params
+ * - `e` {Event} the event of current mouse
+ * - `target` {Element} the currentTarget of the event
+ * - `node` {DOM} the react-tooltip object
+ * - `place` {String} top / right / bottom / left
+ * - `effect` {String} float / solid
+ * - `offset` {Object} the offset to default position
+ *
+ * @return {Object
+ * - `isNewState` {Bool} required
+ * - `newState` {Object}
+ * - `position` {OBject} {left: {Number}, top: {Number}}
+ */
+/* Utils */
 var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
   var boundingClientRect = currentTarget.getBoundingClientRect();
   var targetTop = boundingClientRect.top;
@@ -193,22 +216,6 @@ var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
 
 // List all possibility of tooltip final offset
 // This is useful in judging if it is necessary for tooltip to switch position when out of window
-/**
- * Calculate the position of tooltip
- *
- * @params
- * - `e` {Event} the event of current mouse
- * - `target` {Element} the currentTarget of the event
- * - `node` {DOM} the react-tooltip object
- * - `place` {String} top / right / bottom / left
- * - `effect` {String} float / solid
- * - `offset` {Object} the offset to default position
- *
- * @return {Object
- * - `isNewState` {Bool} required
- * - `newState` {Object}
- * - `position` {OBject} {left: {Number}, top: {Number}}
- */
 var getDefaultPosition = function getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight) {
   var top = void 0;
   var right = void 0;
