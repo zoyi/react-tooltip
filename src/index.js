@@ -202,8 +202,10 @@ class ReactTooltip extends Component {
 
     // Global event to hide tooltip
     if (globalEventOff) {
-      getWindow(this.props.document).removeEventListener(globalEventOff, this.hideTooltip)
-      getWindow(this.props.document).addEventListener(globalEventOff, this.hideTooltip, false)
+      globalEventOff.split(' ').forEach(function (event) {
+        getWindow(this.props.document).removeEventListener(event, this.hideTooltip)
+        getWindow(this.props.document).addEventListener(event, this.hideTooltip, false)
+      }, this)
     }
 
     // Track removal of targetArray elements from DOM
@@ -221,7 +223,11 @@ class ReactTooltip extends Component {
       if (this.isCustomEvent(target)) this.customUnbindListener(target)
     })
 
-    if (globalEventOff) getWindow(this.props.document).removeEventListener(globalEventOff, this.hideTooltip)
+    if (globalEventOff) {
+      globalEventOff.split(' ').forEach(function (event) {
+        getWindow(this.props.document).removeEventListener(event, this.hideTooltip)
+      }, this)
+    }
     this.unbindRemovalTracker()
   }
 

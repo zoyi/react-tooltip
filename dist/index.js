@@ -248,8 +248,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       // Global event to hide tooltip
       if (globalEventOff) {
-        (0, _window2.default)(this.props.document).removeEventListener(globalEventOff, this.hideTooltip);
-        (0, _window2.default)(this.props.document).addEventListener(globalEventOff, this.hideTooltip, false);
+        globalEventOff.split(' ').forEach(function (event) {
+          (0, _window2.default)(this.props.document).removeEventListener(event, this.hideTooltip);
+          (0, _window2.default)(this.props.document).addEventListener(event, this.hideTooltip, false);
+        }, this);
       }
 
       // Track removal of targetArray elements from DOM
@@ -276,7 +278,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         if (_this4.isCustomEvent(target)) _this4.customUnbindListener(target);
       });
 
-      if (globalEventOff) (0, _window2.default)(this.props.document).removeEventListener(globalEventOff, this.hideTooltip);
+      if (globalEventOff) {
+        globalEventOff.split(' ').forEach(function (event) {
+          (0, _window2.default)(this.props.document).removeEventListener(event, this.hideTooltip);
+        }, this);
+      }
       this.unbindRemovalTracker();
     }
 
