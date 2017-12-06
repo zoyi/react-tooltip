@@ -56,7 +56,8 @@ class ReactTooltip extends Component {
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
-    wrapper: PropTypes.string
+    wrapper: PropTypes.string,
+    document: PropTypes.any
   };
 
   static defaultProps = {
@@ -149,13 +150,14 @@ class ReactTooltip extends Component {
   /**
    * Pick out corresponded target elements
    */
-  getTargetArray (id) {
+  getTargetArray (id, doc) {
     let targetArray
+    let container = doc || document
     if (!id) {
-      targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
+      targetArray = container.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       const escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-      targetArray = document.querySelectorAll(`[data-tip][data-for="${escaped}"]`)
+      targetArray = container.querySelectorAll(`[data-tip][data-for="${escaped}"]`)
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
@@ -166,8 +168,8 @@ class ReactTooltip extends Component {
    * These listeners used to trigger showing or hiding the tooltip
    */
   bindListener () {
-    const {id, globalEventOff} = this.props
-    let targetArray = this.getTargetArray(id)
+    const {id, globalEventOff, document} = this.props
+    let targetArray = this.getTargetArray(id, document)
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
@@ -203,8 +205,8 @@ class ReactTooltip extends Component {
    * Unbind listeners on target elements
    */
   unbindListener () {
-    const {id, globalEventOff} = this.props
-    const targetArray = this.getTargetArray(id)
+    const {id, globalEventOff, document} = this.props
+    const targetArray = this.getTargetArray(id, document)
     targetArray.forEach(target => {
       this.unbindBasicListener(target)
       if (this.isCustomEvent(target)) this.customUnbindListener(target)
@@ -232,7 +234,7 @@ class ReactTooltip extends Component {
   showTooltip (e, isGlobalCall) {
     if (isGlobalCall) {
       // Don't trigger other elements belongs to other ReactTooltip
-      const targetArray = this.getTargetArray(this.props.id)
+      const targetArray = this.getTargetArray(this.props.id, this.props.document)
       const isMyElement = targetArray.some(ele => ele === e.currentTarget)
       if (!isMyElement || this.state.show) return
     }
@@ -350,7 +352,7 @@ class ReactTooltip extends Component {
     if (isEmptyTip || disable) return // if the tooltip is empty, disable the tooltip
     if (hasTarget) {
       // Don't trigger other elements belongs to other ReactTooltip
-      const targetArray = this.getTargetArray(this.props.id)
+      const targetArray = this.getTargetArray(this.props.id, this.props.document)
       const isMyElement = targetArray.some(ele => ele === e.currentTarget)
       if (!isMyElement || !this.state.show) return
     }
@@ -407,11 +409,12 @@ class ReactTooltip extends Component {
    * in this way we can insert default css
    */
   setStyleHeader () {
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
-      let tag = document.createElement('style')
+    let container = this.props.document || document
+    if (!container.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+      let tag = container.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
-      document.getElementsByTagName('head')[0].appendChild(tag)
+      container.getElementsByTagName('head')[0].appendChild(tag)
     }
   }
 
