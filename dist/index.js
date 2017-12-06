@@ -493,11 +493,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           currentTarget = _state3.currentTarget,
           place = _state3.place,
           effect = _state3.effect,
-          offset = _state3.offset,
-          document = _state3.document;
+          offset = _state3.offset;
 
       var node = _reactDom2.default.findDOMNode(this);
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset, document, this.isIE());
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset, this.props.document, this.isIE());
 
       if (result.isNewState) {
         // Switch to reverse placement

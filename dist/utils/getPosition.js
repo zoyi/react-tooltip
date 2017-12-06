@@ -18,7 +18,7 @@ exports.default = function (e, target, node, place, effect, offset, doc, isIE) {
       extraOffset_X = _calculateOffset.extraOffset_X,
       extraOffset_Y = _calculateOffset.extraOffset_Y;
 
-  var container = doc.defaultView || doc.parentWindow || window;
+  var container = doc && (doc.defaultView || doc.parentWindow) || window;
 
   var windowWidth = container.innerWidth;
   var windowHeight = container.innerHeight;
